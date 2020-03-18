@@ -13,6 +13,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -58,18 +59,23 @@ public class Main extends Application {
         } catch (Exception exp) { return; };
     }
 
-    private void clickedMenuFigures(Menu _menuFigures, Menu _menuNeedPoints) {
+    private void clickedRefresh(Menu _menuFigures, Menu _menuNeedPoints) {
         while (this.currentMenuItems > 2) {
             _menuFigures.getItems().remove(2);
             this.currentMenuItems--;
         }
 
-        File folder = new File("./out/production/OOP/sample/Figures");
-        for (File file : folder.listFiles()) {
-            MenuItem menuItem = new MenuItem(file.getName().replaceAll(".class($)",""));
-            menuItem.setOnAction(event -> this.nameOfFigure(file.getName(), _menuNeedPoints));
-            _menuFigures.getItems().add(menuItem);
-            this.currentMenuItems++;
+        try {
+            File folder = new File("./out/production/OOP/sample/Figures");
+            for (File file : folder.listFiles()) {
+                MenuItem menuItem = new MenuItem(file.getName().replaceAll(".class($)", ""));
+                menuItem.setOnAction(event -> this.nameOfFigure(file.getName(), _menuNeedPoints));
+                _menuFigures.getItems().add(menuItem);
+                this.currentMenuItems++;
+            }
+        } catch (Exception exp) {
+            JOptionPane.showMessageDialog(null,"You do not have a folder 'Figures'.\nAdd a folder to continue.");
+            return;
         }
     }
 
@@ -129,7 +135,7 @@ public class Main extends Application {
         MenuItem menuRefresh = new MenuItem("Refresh");
         menuFigures.getItems().add(menuRefresh);
         menuFigures.getItems().add(new SeparatorMenuItem());
-        menuRefresh.setOnAction(event -> this.clickedMenuFigures(menuFigures, menuNeedPoints));
+        menuRefresh.setOnAction(event -> this.clickedRefresh(menuFigures, menuNeedPoints));
         menuBar.getMenus().add(menuFile);
         menuBar.getMenus().add(menuFigures);
         menuBar.getMenus().add(menuNeedPoints);
