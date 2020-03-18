@@ -7,6 +7,6 @@ import java.io.Serializable;
 
 // Abstract class
 public abstract class Shape implements Serializable {
-    public int HowManyNeed() { return -1; };
-    public boolean Draw(Point point, Color penColor, Color fillColor, int Width, Canvas canvas) { return true; };
+    public int howManyNeed() { return -1; };
+    public boolean draw(Point point, Color penColor, Color fillColor, int Width, Canvas canvas) { return true; };
 }

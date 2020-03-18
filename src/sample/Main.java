@@ -21,8 +21,9 @@ public class Main extends Application {
     private ArrayList<Shape> shapes = new ArrayList<Shape>();
     private String nameOfFigure;
     private int currentQuantityOfShapes = 0;
+    private int currentMenuItems = 2;
 
-    private void SaveArrayList() {
+    private void saveArrayList() {
         File file = new File("Paint3d-UltraProVersion-ForTrueMan.ArrayList");
         try {
             FileOutputStream fileStream = new FileOutputStream(file);
@@ -32,7 +33,7 @@ public class Main extends Application {
         } catch (Exception exp) { return; };
     }
 
-    private void OpenArrayList(Canvas canvas, MenuItem menuItem) {
+    private void openArrayList(Canvas canvas, MenuItem menuItem) {
         File file = new File("Paint3d-UltraProVersion-ForTrueMan.ArrayList");
         try {
             GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -46,8 +47,8 @@ public class Main extends Application {
             Point point = new Point(0,0);
             shapes.forEach(element -> {
                 this.currentQuantityOfShapes++;
-                if (shapes.get(this.currentQuantityOfShapes - 1).HowManyNeed() == 0) {
-                    element.Draw(point, Color.BLACK, Color.BLACK, 5, canvas);
+                if (shapes.get(this.currentQuantityOfShapes - 1).howManyNeed() == 0) {
+                    element.draw(point, Color.BLACK, Color.BLACK, 5, canvas);
                 } else {
                     shapes.remove(this.currentQuantityOfShapes - 1);
                     this.currentQuantityOfShapes--;
@@ -57,30 +58,45 @@ public class Main extends Application {
         } catch (Exception exp) { return; };
     }
 
-    private void Clicked(MouseEvent event, Canvas canvas, MenuItem menuItem, Color penColor, Color fillColor)  {
+    private void clickedMenuFigures(Menu _menuFigures, Menu _menuNeedPoints) {
+        while (this.currentMenuItems > 2) {
+            _menuFigures.getItems().remove(1);
+            this.currentMenuItems--;
+        }
+
+        File folder = new File("./out/production/OOP/sample/Figures");
+        for (File file : folder.listFiles()) {
+            MenuItem menuItem = new MenuItem(file.getName().replaceAll(".class($)",""));
+            menuItem.setOnAction(event -> this.nameOfFigure(file.getName(), _menuNeedPoints));
+            _menuFigures.getItems().add(menuItem);
+            this.currentMenuItems++;
+        }
+    }
+
+    private void clicked(MouseEvent event, Canvas canvas, MenuItem menuItem, Color penColor, Color fillColor)  {
         Point point = new Point(event.getX(), event.getY());
         if (
             this.currentQuantityOfShapes == 0 ||
-            shapes.get(this.currentQuantityOfShapes - 1).Draw(point, Color.BLACK, Color.BLACK, 5, canvas)
+            shapes.get(this.currentQuantityOfShapes - 1).draw(point, Color.BLACK, Color.BLACK, 5, canvas)
             ) {
             try {
                 Object nameOfClass = Class.forName(this.nameOfFigure).getConstructor().newInstance();
                 Shape newShape = (Shape) nameOfClass;
                 shapes.add(newShape);
                 this.currentQuantityOfShapes++;
-                shapes.get(this.currentQuantityOfShapes - 1).Draw(point, Color.BLACK, Color.BLACK, 5, canvas);
+                shapes.get(this.currentQuantityOfShapes - 1).draw(point, Color.BLACK, Color.BLACK, 5, canvas);
             } catch (Exception exp) { return; };
         }
-        if (shapes.get(this.currentQuantityOfShapes - 1).HowManyNeed() > 0) {
-            menuItem.setText(shapes.get(this.currentQuantityOfShapes - 1).HowManyNeed() + " need points");
+        if (shapes.get(this.currentQuantityOfShapes - 1).howManyNeed() > 0) {
+            menuItem.setText(shapes.get(this.currentQuantityOfShapes - 1).howManyNeed() + " need points");
         } else {
             menuItem.setText("New shape");
         }
     }
 
-    private void NameOfFigure(String _nameOfFigure, MenuItem menuItem) {
+    private void nameOfFigure(String _nameOfFigure, MenuItem menuItem) {
         this.nameOfFigure = "sample.Figures." + _nameOfFigure.replaceAll(".class($)","");
-        if (this.currentQuantityOfShapes != 0 && shapes.get(this.currentQuantityOfShapes - 1).HowManyNeed() != 0) {
+        if (this.currentQuantityOfShapes != 0 && shapes.get(this.currentQuantityOfShapes - 1).howManyNeed() != 0) {
             menuItem.setText("New shape");
             shapes.remove(this.currentQuantityOfShapes - 1);
             this.currentQuantityOfShapes--;
@@ -106,16 +122,14 @@ public class Main extends Application {
         Color fillColor = Color.BLACK;
 
         Menu menuNeedPoints = new Menu("Select a shape");
-        menuSave.setOnAction(event -> this.SaveArrayList());
-        menuOpen.setOnAction(event -> this.OpenArrayList(canvas, menuNeedPoints));
+        menuSave.setOnAction(event -> this.saveArrayList());
+        menuOpen.setOnAction(event -> this.openArrayList(canvas, menuNeedPoints));
 
         Menu menuFigures = new Menu("Shapes");
-        File folder = new File("./src/sample/Figures");
-        for (File file : folder.listFiles()) {
-            MenuItem menuItem = new MenuItem(file.getName().replaceAll(".class($)",""));
-            menuItem.setOnAction(event -> this.NameOfFigure(file.getName(), menuNeedPoints));
-            menuFigures.getItems().add(menuItem);
-        }
+        MenuItem menuRefresh = new MenuItem("Refresh");
+        menuFigures.getItems().add(menuRefresh);
+        menuFigures.getItems().add(new SeparatorMenuItem());
+        menuRefresh.setOnAction(event -> this.clickedMenuFigures(menuFigures, menuNeedPoints));
         menuBar.getMenus().add(menuFile);
         menuBar.getMenus().add(menuFigures);
         menuBar.getMenus().add(menuNeedPoints);
@@ -123,7 +137,7 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        canvas.setOnMouseClicked(mouseEvent -> this.Clicked(mouseEvent, canvas, menuNeedPoints, penColor, fillColor));
+        canvas.setOnMouseClicked(mouseEvent -> this.clicked(mouseEvent, canvas, menuNeedPoints, penColor, fillColor));
     }
 
     public static void main(String[] args) {
