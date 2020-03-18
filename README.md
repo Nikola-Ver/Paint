@@ -1,1 +1,1 @@
-# Paint3d-UltraProVersion-ForTrueMan
+# Paint
