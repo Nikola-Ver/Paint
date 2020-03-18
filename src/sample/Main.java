@@ -79,7 +79,7 @@ public class Main extends Application {
     }
 
     private void NameOfFigure(String _nameOfFigure, MenuItem menuItem) {
-        this.nameOfFigure = "sample.Figures." + _nameOfFigure.replaceAll(".java($)","");
+        this.nameOfFigure = "sample.Figures." + _nameOfFigure.replaceAll(".class($)","");
         if (this.currentQuantityOfShapes != 0 && shapes.get(this.currentQuantityOfShapes - 1).HowManyNeed() != 0) {
             menuItem.setText("New shape");
             shapes.remove(this.currentQuantityOfShapes - 1);
@@ -112,7 +112,7 @@ public class Main extends Application {
         Menu menuFigures = new Menu("Shapes");
         File folder = new File("./src/sample/Figures");
         for (File file : folder.listFiles()) {
-            MenuItem menuItem = new MenuItem(file.getName().replaceAll(".java($)",""));
+            MenuItem menuItem = new MenuItem(file.getName().replaceAll(".class($)",""));
             menuItem.setOnAction(event -> this.NameOfFigure(file.getName(), menuNeedPoints));
             menuFigures.getItems().add(menuItem);
         }
