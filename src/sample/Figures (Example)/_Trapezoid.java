@@ -6,9 +6,9 @@ import javafx.scene.paint.Color;
 import sample.Point;
 import sample.Shape;
 
-public class _Rect extends Shape {
+public class _Trapezoid extends Shape {
     private int currentQuantityPoints = 0;
-    private int requiredQuantityOfPoints = 3;
+    private int requiredQuantityOfPoints = 4;
 
     private Point[] point = new Point[requiredQuantityOfPoints];
 
@@ -31,9 +31,10 @@ public class _Rect extends Shape {
             GraphicsContext gc = canvas.getGraphicsContext2D();
             gc.setLineWidth(Width);
             gc.setStroke(penColor);
-            gc.setFill(fillColor);
-            gc.strokeRect(this.point[0].x, this.point[0].y, this.point[1].x - this.point[0].x, this.point[2].y - this.point[0].y);
-            gc.fillRect(this.point[0].x, this.point[0].y, this.point[1].x - this.point[0].x, this.point[2].y - this.point[0].y);
+            gc.strokeLine(this.point[0].x, this.point[0].y, this.point[1].x, this.point[1].y);
+            gc.strokeLine(this.point[1].x, this.point[1].y, this.point[2].x, this.point[2].y);
+            gc.strokeLine(this.point[2].x, this.point[2].y, this.point[3].x, this.point[3].y);
+            gc.strokeLine(this.point[3].x, this.point[3].y, this.point[0].x, this.point[0].y);
         }
         return flag;
     }

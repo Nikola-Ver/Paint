@@ -60,7 +60,7 @@ public class Main extends Application {
 
     private void clickedMenuFigures(Menu _menuFigures, Menu _menuNeedPoints) {
         while (this.currentMenuItems > 2) {
-            _menuFigures.getItems().remove(1);
+            _menuFigures.getItems().remove(2);
             this.currentMenuItems--;
         }
 

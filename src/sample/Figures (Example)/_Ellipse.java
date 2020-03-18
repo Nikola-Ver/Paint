@@ -13,12 +13,12 @@ public class _Ellipse extends Shape {
     private Point[] point = new Point[requiredQuantityOfPoints];
 
     @Override
-    public int HowManyNeed() {
+    public int howManyNeed() {
         return (this.requiredQuantityOfPoints - this.currentQuantityPoints);
     }
 
     @Override
-    public boolean Draw(Point point, Color penColor, Color fillColor, int Width, Canvas canvas) {
+    public boolean draw(Point point, Color penColor, Color fillColor, int Width, Canvas canvas) {
         boolean flag = false;
         if (this.currentQuantityPoints == this.requiredQuantityOfPoints) {
             flag = true;
